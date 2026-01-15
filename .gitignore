@@ -9,3 +9,17 @@ Output/
 # Artifacts folder
 artifacts/
 **/artifacts/
+
+# Dataset
+Data/
+**/Data/
+
+# Spark history server
+spark-warehouse/
+**/spark-warehouse/
+
+# Spark logs
+logs/
+**/logs/
+
+# Spark metastore
