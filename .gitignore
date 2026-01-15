@@ -1,0 +1,11 @@
+# Python cache
+__pycache__/
+**/__pycache__/
+
+# Output folder
+Output/
+**/Output/
+
+# Artifacts folder
+artifacts/
+**/artifacts/
