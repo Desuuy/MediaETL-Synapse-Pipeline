@@ -9,6 +9,17 @@ Hệ thống ETL hoàn chỉnh bao gồm:
 4. **Real-time Dashboard** - Grafana dashboard hiển thị dữ liệu real-time
 
 ---
+## EnviromentEnviroment
+```
+pip install streamlit pandas pyodbc plotly
+```
+## Running
+
+```
+cd Class4_ETL_Basic/Dashboard
+streamlit run app.py
+```
+
 
 ## 🚀 Hướng dẫn cài đặt và sử dụng
 
