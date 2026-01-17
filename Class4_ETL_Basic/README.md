@@ -14,7 +14,7 @@ Hệ thống ETL hoàn chỉnh bao gồm:
 
 ```bash
 # Chạy full ETL pipeline tự động (load data + stored procedures + dashboard)
-python Class4_ETL_Basic/run_full_etl.py
+python C:\Users\anhhu\Downloads\Study_DE\Project\Class4_ETL_Basic\Scripts\run_full_etl.py
 ```
 
 Script này sẽ tự động:
@@ -332,7 +332,7 @@ Sau đó chạy stored procedures trong SSMS.
 
 ```bash
 # Chạy full pipeline (tự động hóa tất cả)
-python Class4_ETL_Basic/run_full_etl.py
+python C:\Users\anhhu\Downloads\Study_DE\Project\Class4_ETL_Basic\Scripts\run_full_etl.py
 
 # Input mẫu:
 # SQL Server: localhost
