@@ -4,6 +4,8 @@
 
 > ETL pipeline and real-time dashboard for media analytics: ingest JSON data into SQL Server Data Warehouse and Data Mart, then visualize with Streamlit and Grafana.
 
+This repository hosts the **Data Engineering class** projects: a hands-on pipeline from raw JSON ingestion through staging, data warehousing, and mart load, to a live analytics dashboard. Built to mirror real-world ETL workflows with SQL Server, PySpark, and interactive dashboards.
+
 **Repository:** [https://github.com/Desuuy/MediaETL-Synapse-Pipeline](https://github.com/Desuuy/MediaETL-Synapse-Pipeline)
 
 ---
