@@ -43,7 +43,7 @@ This project implements an **ETL (Extract – Transform – Load)** pipeline for
 | **ETL Load to Database** | Connect to SQL Server (Windows or SQL Auth), load JSON via Spark into `Staging_RawData` in `DW_MediaAnalytics`, ready for ELT stored procedures. |
 | **Full ETL Pipeline** | Single end-to-end run: load to Staging → run DW SP → run DM SP. Optional: launch Streamlit dashboard with auto-refresh after ETL. |
 | **Database Scripts** | Create DB, DW/DM schemas, dimension tables (e.g. DimDate), ELT stored procedures, and optional SQL Server Agent jobs. `DB_Fixed/` holds permission checks, diagnostics, and fixes. |
-| **Dashboard** | Streamlit app connected to `DM_MediaAnalytics` (and DW if needed). Sidebar for server/database/auth; Plotly charts by time, app, content type; optional auto-refresh. |
+| **Dashboard** | Streamlit app connected to `DM_MediaAnalytics` (and DW if needed). Sidebar for server/database/auth; Plotly charts by time, app, content type; optional auto-refresh; hỗ trợ phân tích **Most Watch (Customer Taste)** và **Activation** cho từng hợp đồng trong tab Contract Analytics. |
 
 ---
 

@@ -62,6 +62,8 @@ BEGIN
             ContractID, TotalDevices,
             Duration_TruyenHinh, Duration_PhimTruyen, Duration_GiaiTri,
             Duration_ThieuNhi, Duration_TheThao, Duration_Error, Duration_Total,
+            MostWatchContentType, MostWatchDuration,
+            ActivationDays, ActivationLevel,
             CreatedDate, UpdatedDate
         )
         SELECT 
@@ -80,11 +82,38 @@ BEGIN
             fcs.TotalDuration_TheThao,
             fcs.TotalDuration_Error,
             fcs.TotalDuration_All,
+            -- Most Watch / Customer Taste: content type with max positive duration
+            mw.ContentType AS MostWatchContentType,
+            ISNULL(mw.Duration, 0) AS MostWatchDuration,
+            -- Activation: days since first active date for this contract (based on first DateValue seen in DW)
+            DATEDIFF(
+                DAY,
+                MIN(d.DateValue) OVER (PARTITION BY c.ContractID),
+                d.DateValue
+            ) + 1 AS ActivationDays,
+            CASE 
+                WHEN DATEDIFF(DAY, MIN(d.DateValue) OVER (PARTITION BY c.ContractID), d.DateValue) + 1 < 3 THEN N'Thấp'
+                WHEN DATEDIFF(DAY, MIN(d.DateValue) OVER (PARTITION BY c.ContractID), d.DateValue) + 1 < 10 THEN N'Trung bình'
+                ELSE N'Cao'
+            END AS ActivationLevel,
             GETDATE(),
             GETDATE()
         FROM DW_MediaAnalytics.dbo.FactContractSummary fcs
         INNER JOIN DW_MediaAnalytics.dbo.DimDate d ON fcs.DateKey = d.DateKey
         INNER JOIN DW_MediaAnalytics.dbo.DimContract c ON fcs.ContractKey = c.ContractKey
+        OUTER APPLY (
+            SELECT TOP 1 ContentType, Duration
+            FROM (
+                VALUES
+                    (N'Truyền Hình', ISNULL(fcs.TotalDuration_TruyenHinh, 0)),
+                    (N'Phim Truyện', ISNULL(fcs.TotalDuration_PhimTruyen, 0)),
+                    (N'Giải Trí', ISNULL(fcs.TotalDuration_GiaiTri, 0)),
+                    (N'Thiếu Nhi', ISNULL(fcs.TotalDuration_ThieuNhi, 0)),
+                    (N'Thể Thao', ISNULL(fcs.TotalDuration_TheThao, 0))
+            ) AS v(ContentType, Duration)
+            WHERE Duration > 0
+            ORDER BY Duration DESC
+        ) AS mw
         WHERE (@ProcessDate IS NULL OR d.DateValue = @ProcessDate)
         
         PRINT 'Đã load ' + CAST(@@ROWCOUNT AS VARCHAR(20)) + ' dòng vào DM_ContractAnalytics'

@@ -36,6 +36,12 @@ CREATE TABLE DM_ContractAnalytics (
     Duration_TheThao BIGINT DEFAULT 0,
     Duration_Error BIGINT DEFAULT 0,
     Duration_Total BIGINT DEFAULT 0,
+    -- Customer Taste: Most watched content type for this contract & day
+    MostWatchContentType NVARCHAR(50) NULL,
+    MostWatchDuration BIGINT DEFAULT 0,
+    -- Activation: days since first active date for this contract (classification by days)
+    ActivationDays INT DEFAULT 0,
+    ActivationLevel NVARCHAR(20) NULL,
     -- Metadata
     CreatedDate DATETIME DEFAULT GETDATE(),
     UpdatedDate DATETIME DEFAULT GETDATE()

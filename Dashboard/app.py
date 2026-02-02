@@ -212,6 +212,10 @@ def main():
         # Top contracts selector
         top_n = st.slider("Top N Contracts", 5, 50, 10)
 
+        st.markdown(
+            "Most Watch (Customer Taste) được tính dựa trên loại nội dung có tổng thời lượng xem cao nhất (> 0) cho từng hợp đồng."
+        )
+
         query_contracts = f"""
             SELECT TOP {top_n}
                 ContractID,
@@ -219,7 +223,13 @@ def main():
                 SUM(Duration_Total) / 3600.0 as TotalDuration_Hours,
                 SUM(Duration_TruyenHinh) / 3600.0 as Duration_TH_Hours,
                 SUM(Duration_PhimTruyen) / 3600.0 as Duration_PT_Hours,
-                SUM(Duration_GiaiTri) / 3600.0 as Duration_GT_Hours
+                SUM(Duration_GiaiTri) / 3600.0 as Duration_GT_Hours,
+                -- Most Watch / Customer Taste: lấy loại nội dung có thời lượng cao nhất > 0
+                MAX(MostWatchContentType) as MostWatchContentType,
+                SUM(MostWatchDuration) / 3600.0 as MostWatchDuration_Hours,
+                -- Activation: phân loại theo số ngày active của hợp đồng
+                MAX(ActivationDays) as ActivationDays,
+                MAX(ActivationLevel) as ActivationLevel
             FROM DM_ContractAnalytics
             WHERE DateValue >= DATEADD(day, -30, '{today}')
             GROUP BY ContractID
@@ -229,6 +239,7 @@ def main():
         df_contracts = load_data_from_dm(conn_dm, query_contracts)
 
         if df_contracts is not None and len(df_contracts) > 0:
+            st.subheader("Top Contracts Detail")
             st.dataframe(df_contracts, use_container_width=True)
 
             # Bar chart

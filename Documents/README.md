@@ -216,7 +216,7 @@ docker run -d -p 3000:3000 --name=grafana grafana/grafana
 
 **Các tính năng Dashboard:**
 - **Overview Dashboard:** KPI cards, daily trends, content type distribution
-- **Contract Analytics:** Top contracts, contract details, filters
+- **Contract Analytics:** Top contracts, contract details, filters, hiển thị thêm **Most Watch (Customer Taste)** và **Activation** cho từng hợp đồng
 - **Content Type Trends:** Trends over time, comparisons, statistics
 
 **Cấu hình Auto Refresh (Real-time):**
@@ -254,7 +254,7 @@ docker run -d -p 3000:3000 --name=grafana grafana/grafana
 ### Data Mart (Denormalized)
 
 **Tables:**
-- `DM_ContractAnalytics` - Phân tích Contract (denormalized)
+- `DM_ContractAnalytics` - Phân tích Contract (denormalized, bao gồm thêm các cột `MostWatchContentType`, `MostWatchDuration`, `ActivationDays`, `ActivationLevel` để phân tích **Customer Taste** và **Activation** của từng hợp đồng theo ngày)
 - `DM_DailySummary` - Tóm tắt theo ngày
 - `DM_ContentTypeTrend` - Xu hướng Content Type
 
