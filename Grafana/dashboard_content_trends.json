@@ -1,0 +1,78 @@
+{
+  "dashboard": {
+    "title": "Media Analytics - Content Type Trends",
+    "tags": ["media", "analytics", "trends"],
+    "timezone": "browser",
+    "schemaVersion": 27,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Content Type Trends Over Time",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+        "targets": [
+          {
+            "rawSql": "SELECT DateValue as time, TotalDuration / 3600.0 as duration_hours, ContentType FROM DM_ContentTypeTrend WHERE DateValue >= DATEADD(day, -30, GETDATE()) ORDER BY DateValue, ContentType",
+            "format": "time_series",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "hours",
+            "decimals": 1
+          }
+        },
+        "options": {
+          "legend": {"displayMode": "table", "placement": "bottom"},
+          "tooltip": {"mode": "multi"}
+        }
+      },
+      {
+        "id": 2,
+        "title": "Content Type Comparison",
+        "type": "barchart",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "targets": [
+          {
+            "rawSql": "SELECT ContentType, SUM(TotalDuration) / 3600.0 as duration_hours FROM DM_ContentTypeTrend WHERE DateValue >= DATEADD(day, -30, GETDATE()) GROUP BY ContentType ORDER BY duration_hours DESC",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "hours"
+          }
+        },
+        "options": {
+          "legend": {"displayMode": "table", "placement": "bottom"}
+        }
+      },
+      {
+        "id": 3,
+        "title": "Content Type Statistics",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "targets": [
+          {
+            "rawSql": "SELECT ContentType, SUM(TotalDuration) / 3600.0 as TotalDuration_Hours, SUM(TotalSessions) as TotalSessions, SUM(UniqueContracts) as UniqueContracts FROM DM_ContentTypeTrend WHERE DateValue >= DATEADD(day, -30, GETDATE()) GROUP BY ContentType ORDER BY TotalDuration_Hours DESC",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showHeader": true
+        }
+      }
+    ],
+    "time": {
+      "from": "now-30d",
+      "to": "now"
+    }
+  }
+}

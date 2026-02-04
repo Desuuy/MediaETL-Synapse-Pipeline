@@ -1,0 +1,20 @@
+{
+  "name": "SQL Server - Media Analytics",
+  "type": "mssql",
+  "url": "localhost:1433",
+  "access": "proxy",
+  "user": "",
+  "database": "DM_MediaAnalytics",
+  "basicAuth": false,
+  "isDefault": true,
+  "jsonData": {
+    "authenticationType": "Windows Authentication",
+    "encrypt": "false",
+    "server": "localhost",
+    "port": 1433,
+    "database": "DM_MediaAnalytics"
+  },
+  "secureJsonData": {
+    "password": ""
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "dashboard": {
+    "title": "Media Analytics - Contract Analytics",
+    "tags": ["media", "analytics", "contract"],
+    "timezone": "browser",
+    "schemaVersion": 27,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Top 10 Contracts by Duration",
+        "type": "barchart",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "targets": [
+          {
+            "rawSql": "SELECT TOP 10 ContractID, SUM(Duration_Total) / 3600.0 as duration_hours FROM DM_ContractAnalytics WHERE DateValue >= DATEADD(day, -30, GETDATE()) GROUP BY ContractID ORDER BY duration_hours DESC",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "hours",
+            "decimals": 1
+          }
+        },
+        "options": {
+          "legend": {"displayMode": "table", "placement": "bottom"},
+          "orientation": "horizontal"
+        }
+      },
+      {
+        "id": 2,
+        "title": "Contract Duration by Content Type",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "targets": [
+          {
+            "rawSql": "SELECT DateValue as time, Duration_TruyenHinh / 3600.0 as TruyenHinh FROM DM_ContractAnalytics WHERE DateValue >= DATEADD(day, -30, GETDATE()) AND ContractID = '$contract' GROUP BY DateValue, Duration_TruyenHinh ORDER BY DateValue",
+            "format": "time_series",
+            "refId": "A"
+          },
+          {
+            "rawSql": "SELECT DateValue as time, Duration_PhimTruyen / 3600.0 as PhimTruyen FROM DM_ContractAnalytics WHERE DateValue >= DATEADD(day, -30, GETDATE()) AND ContractID = '$contract' GROUP BY DateValue, Duration_PhimTruyen ORDER BY DateValue",
+            "format": "time_series",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "hours"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Contract Details Table",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8},
+        "targets": [
+          {
+            "rawSql": "SELECT TOP 20 ContractID, SUM(TotalDevices) as TotalDevices, SUM(Duration_Total) / 3600.0 as TotalDuration_Hours, SUM(Duration_TruyenHinh) / 3600.0 as TH_Hours, SUM(Duration_PhimTruyen) / 3600.0 as PT_Hours, SUM(Duration_GiaiTri) / 3600.0 as GT_Hours FROM DM_ContractAnalytics WHERE DateValue >= DATEADD(day, -30, GETDATE()) GROUP BY ContractID ORDER BY TotalDuration_Hours DESC",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showHeader": true,
+          "sortBy": [{"displayName": "TotalDuration_Hours", "desc": true}]
+        }
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "contract",
+          "type": "query",
+          "label": "Contract",
+          "datasource": "SQL Server - Media Analytics",
+          "query": "SELECT DISTINCT ContractID FROM DM_ContractAnalytics ORDER BY ContractID",
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          },
+          "includeAll": true,
+          "multi": false
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30d",
+      "to": "now"
+    }
+  }
+}

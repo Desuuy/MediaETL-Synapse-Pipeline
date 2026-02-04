@@ -1,0 +1,144 @@
+{
+  "dashboard": {
+    "title": "Media Analytics - Overview Dashboard",
+    "tags": ["media", "analytics", "etl"],
+    "timezone": "browser",
+    "schemaVersion": 27,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Total Contracts (Last 7 Days)",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+        "targets": [
+          {
+            "rawSql": "SELECT SUM(TotalContracts) as value FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -7, GETDATE())",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"}
+              ]
+            },
+            "unit": "short",
+            "decimals": 0
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Total Devices (Last 7 Days)",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+        "targets": [
+          {
+            "rawSql": "SELECT SUM(TotalDevices) as value FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -7, GETDATE())",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "unit": "short",
+            "decimals": 0
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Total Duration - Hours (Last 7 Days)",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+        "targets": [
+          {
+            "rawSql": "SELECT SUM(TotalDuration_All) / 3600.0 as value FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -7, GETDATE())",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "unit": "hours",
+            "decimals": 1
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Days Count",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+        "targets": [
+          {
+            "rawSql": "SELECT COUNT(*) as value FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -7, GETDATE())",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "unit": "short",
+            "decimals": 0
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Daily Duration Trend",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+        "targets": [
+          {
+            "rawSql": "SELECT DateValue as time, TotalDuration_All / 3600.0 as duration_hours FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -30, GETDATE()) ORDER BY DateValue",
+            "format": "time_series",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "hours",
+            "decimals": 1
+          }
+        },
+        "options": {
+          "legend": {"displayMode": "table", "placement": "bottom"}
+        }
+      },
+      {
+        "id": 6,
+        "title": "Content Type Distribution",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+        "targets": [
+          {
+            "rawSql": "SELECT 'Truyền Hình' as label, SUM(TotalDuration_TruyenHinh) / 3600.0 as value FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -30, GETDATE()) UNION ALL SELECT 'Phim Truyện', SUM(TotalDuration_PhimTruyen) / 3600.0 FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -30, GETDATE()) UNION ALL SELECT 'Giải Trí', SUM(TotalDuration_GiaiTri) / 3600.0 FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -30, GETDATE()) UNION ALL SELECT 'Thiếu Nhi', SUM(TotalDuration_ThieuNhi) / 3600.0 FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -30, GETDATE()) UNION ALL SELECT 'Thể Thao', SUM(TotalDuration_TheThao) / 3600.0 FROM DM_DailySummary WHERE DateValue >= DATEADD(day, -30, GETDATE())",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "legend": {"displayMode": "table", "placement": "bottom"},
+          "pieType": "pie",
+          "tooltip": {"mode": "single"}
+        }
+      }
+    ],
+    "time": {
+      "from": "now-7d",
+      "to": "now"
+    },
+    "timepicker": {}
+  }
+}
