@@ -1,16 +1,10 @@
 import findspark
 findspark.init()
 
-from pyspark.sql.session import SparkSession
-from pyspark.sql.functions import *
-
-
-
 spark = SparkSession.builder.config("spark.driver.memory", "8g").getOrCreate()
 
 file_path = "C:\\Users\\anhhu\\Downloads\\Study_DE\\Project\\Data\\log_content\\20220401.json"
 file_type = "json"
-save_path = "C:\\Users\\anhhu\\Downloads\\Study_DE\\Project\\Class4_ETL_Basic\\Output"
 
 
 def read_data_from_path(file_path, file_type):
